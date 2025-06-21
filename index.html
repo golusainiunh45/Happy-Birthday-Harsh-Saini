@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎉 Janmadin Mubarak Ho Harsh 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 70px;
+      margin-top: 30px;
+      color: #FFD700;
+      text-shadow: 0 0 20px #ff0080, 0 0 30px #00ffff;
+    }
+
+    p {
+      font-size: 32px;
+      margin: 20px auto;
+      max-width: 90%;
+      line-height: 1.9;
+      color: #00ffcc;
+      text-shadow: 0 0 15px #fff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background: red;
+      border-radius: 50% 50% 50% 50%;
+      animation: float 10s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉🎊 Janmadin Mubarak Ho Harsh! 🎊🎉</h1>
+
+  <p>
+    Harsh bhai, tu sirf ek dost nahi, ek jazbaat hai... <br>
+    Teri dosti meri zindagi ka sabse bada gift hai. <br><br>
+
+    Aaj tera janmadin hai, aur is din main dua karta hoon ki <br>
+    tera har sapna poora ho, har kadam success se bhara ho. <br><br>
+
+    Tu hamesha muskurata rahe, har mod par tere saath khushiyan ho, <br>
+    tere har din mein rang ho, doston ka sang ho, aur dil mein dum ho! <br><br>
+
+    Tu jis jagah bhi jaaye, waha sirf pyaar aur izzat mile. <br>
+    Zindagi teri ek blockbuster film ho jisme tu hero ho, aur har scene superhit ho! <br><br>
+
+    Bhai, tu mera proud hai – hamesha khush reh, hamesha aage badh! 💪<br><br>
+
+    🎂 Happy Birthday Mere Bhai, Mere Dost, Mere Rockstar – HARSH! 🎂<br>
+    🧡 Tera bhai hamesha tere saath hai! 🧡
+  </p>
+
+  <canvas id="fireworks"></canvas>
+
+  <script>
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const fireworks = [];
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    class Firework {
+      constructor(x = random(0, canvas.width), y = canvas.height, targetY = random(100, 400)) {
+        this.x = x;
+        this.y = y;
+        this.targetY = targetY;
+        this.radius = random(2, 4);
+        this.color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        this.speed = random(3, 7);
+        this.angle = -Math.PI / 2;
+        this.exploded = false;
+        this.particles = [];
+      }
+
+      update() {
+        if (!this.exploded) {
+          this.y += this.speed * Math.sin(this.angle);
+          if (this.y < this.targetY) {
+            this.exploded = true;
+            for (let i = 0; i < 120; i++) {
+              this.particles.push(new Particle(this.x, this.y, this.color));
+            }
+          }
+        } else {
+          this.particles.forEach(p => p.update());
+        }
+      }
+
+      draw() {
+        if (!this.exploded) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        } else {
+          this.particles.forEach(p => p.draw());
+        }
+      }
+    }
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.color = color;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.speed = random(1, 6);
+        this.alpha = 1;
+      }
+
+      update() {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.alpha -= 0.015;
+      }
+
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach(f => {
+        f.update();
+        f.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Auto fireworks (double speed)
+    setInterval(() => {
+      for (let i = 0; i < 2; i++) {
+        fireworks.push(new Firework());
+      }
+    }, 800);
+
+    // On click fireworks
+    window.addEventListener('click', (e) => {
+      fireworks.push(new Firework(e.clientX, canvas.height, e.clientY));
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Balloons Generator 🎈
+    function createBalloon() {
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      balloon.style.left = `${Math.random() * 100}vw`;
+      balloon.style.backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 60%)`;
+      balloon.style.animationDuration = `${8 + Math.random() * 5}s`;
+      document.body.appendChild(balloon);
+
+      setTimeout(() => {
+        balloon.remove();
+      }, 15000);
+    }
+
+    setInterval(() => {
+      for (let i = 0; i < 5; i++) {
+        createBalloon();
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
